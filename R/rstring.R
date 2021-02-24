@@ -214,45 +214,10 @@ Author(s):
       
       get_aliases = function(takeFirst=TRUE){
 
-'
-Description:
-  Loads and returns STRING alias table. 
+          
+        aliasDf2<-as.data.frame(read_feather("getAliases.feather"))
+        
 
-Author(s):
-   Andrea Franceschini
-'        
-
-          if(takeFirst &  aliases_type == "take_first" & nrow(aliases_tf)>0) return(aliases_tf)
-          if(!takeFirst &  aliases_type == "all" & nrow(aliases_tf)>0) return(aliases_tf)
-
-          
-          ## TODO: DS: Test take first
-          ## or better: implement it nicer
-          
-        if(!takeFirst){ 
-            aliases_type <<- "all"
-          } else {
-            aliases_type <<- "take_first"
-          }
-          
-          if(takeFirst &  aliases_type == "take_first" & nrow(aliases_tf)>0) return(aliases_tf)
-          if(!takeFirst &  aliases_type == "all" & nrow(aliases_tf)>0) return(aliases_tf)
-          
-          proteins <<- get_proteins()
-          
-          aliasDf <- terms<-as.data.frame(read_feather("alias.feather"))
-          pr1=data.frame(STRING_id=proteins$protein_external_id, alias=proteins$preferred_name, stringsAsFactors=FALSE)        
-          pr2=data.frame(STRING_id=proteins$protein_external_id, alias=proteins$protein_external_id, stringsAsFactors=FALSE)
-          pr3=data.frame(STRING_id=proteins$protein_external_id, alias=unlist(strsplit(proteins$protein_external_id, "\\."))[seq(from=2, to=2*nrow(proteins), by=2)], stringsAsFactors=FALSE)
-          
-          #if(takeFirst){aliasDf = subset(aliasDf, !(alias %in% proteins$preferred_name) & !(alias %in% proteins$protein_external_id) )  }
-          if(takeFirst){aliasDf = subset(aliasDf, !(toupper(iconv(alias, "WINDOWS-1252", "UTF-8")) %in% toupper(proteins$preferred_name)) & 
-                                           !(toupper(iconv(alias, "WINDOWS-1252", "UTF-8")) %in% toupper(proteins$protein_external_id))  &
-                                            !(toupper(iconv(alias, "WINDOWS-1252", "UTF-8")) %in% toupper(unlist(strsplit(proteins$protein_external_id, "\\."))[seq(from=2, to=2*nrow(proteins), by=2)])) )
-          }
-          
-          aliasDf2=rbind(pr1,pr2,pr3, aliasDf)
-          aliases_tf <<- aliasDf2
 
           return(aliasDf2)
       },
