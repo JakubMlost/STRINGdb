@@ -199,7 +199,7 @@ Author(s):
 '
         
         if(nrow(proteins)==0){
-          temp = "9606.protein.info.v11.0.txt"
+          temp = downloadAbsentFile(paste("https://stringdb-static.org/download/protein.info.v", version, "/", species, ".protein.info.v", version, ".txt.gz", sep=""), oD=input_directory)
           proteinsDf <- read.table(temp, sep = "\t", header=TRUE, stringsAsFactors=FALSE, fill = TRUE, quote="")
           proteinsDf2 = subset(proteinsDf, select=c("protein_external_id",  "preferred_name", "protein_size", "annotation"))
           proteins <<- proteinsDf2
